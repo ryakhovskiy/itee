@@ -1,0 +1,140 @@
+{
+  "autorun" : {
+    "itar" : {
+      "qpa" : 20000,
+      "qpl" : 16,
+      "qpb" : 4,
+      "upa" : 100,
+      "upl" : 2,
+      "upb" : 1,
+      "tms" : 300000
+    },
+    "rtar": {
+      "qpa" : 20000,
+      "qpl" : 6,
+      "qpb" : 1,
+      "upa" : 100,
+      "upl" : 1,
+      "upb" : 1,
+      "tms" : 300000
+    }
+  },
+  "load" : {
+    "it" : {
+      "query" : {
+        "jdbc" : {
+          "port" : 30015,
+          "host" : "ussltcsnl1178.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.Driver",
+          "password" : "xxx",
+          "user" : "RTREPORT"
+        },
+        "gen" : {
+          "rr" : true,
+          "et" : 0,
+          "ce" : 10,
+          "fe" : "UTF8",
+          "fn" : "../queries/mm/it_query.txt",
+          "qt" : "QUERY",
+          "qpi" : 1,
+          "si" : 500
+        }
+      },
+      "update" : {
+        "jdbc" : {
+          "port" : 30015,
+          "host" : "ussltcsnl1178.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.driver",
+          "password" : "xxx",
+          "user" : "ERP_470"
+        },
+        "gen" : {
+          "rr" : true,
+          "et" : 0,
+          "ce" : 1,
+          "fe" : "UTF8",
+          "fn" : "../queries/mm/update.txt",
+          "qt" : "QUERY",
+          "qpi" : 1,
+          "si" : 1000
+        }
+      },
+      "mon" : {
+        "jdbc": {
+          "port" : 30015,
+          "host" : "ussltcsnl1178.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.Driver",
+          "password" : "xxx",
+          "user" : "DGH_ADMIN"
+        },
+        "gen" : {
+          "mva" : 120,
+          "ofn" : "autorun_it.pmf",
+          "mqi" : 5000,
+          "pcd" : 300000,
+          "esd" : 5000,
+          "pcp" : 9999,
+          "txv" : 3
+        }
+      }
+    },
+    "rt" : {
+      "query" : {
+        "jdbc" : {
+          "port" : 30015,
+          "host" : "ussltcsnl1177.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.Driver",
+          "password" : "xxx",
+          "user" : "RTREPORT"
+        },
+        "gen": {
+          "rr" : true,
+          "et" : 0,
+          "ce" : 15,
+          "fe" : "UTF8",
+          "fn" : "../queries/mm/rt_query.txt",
+          "qt" : "QUERY",
+          "qpi" : 1,
+          "si" : 2000
+        }
+      },
+      "update" : {
+        "jdbc" : {
+          "port" : 30015,
+          "host" : "ussltcsnl1177.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.Driver",
+          "password" : "xxx",
+          "user" : "ERP_470"
+        },
+        "gen" : {
+          "rr" : true,
+          "et" : 0,
+          "ce" : 1,
+          "fe" : "UTF8",
+          "fn" : "../queries/mm/update.txt",
+          "qt" : "QUERY",
+          "qpi" : 1,
+          "si" : 1000
+        }
+      },
+      "mon" : {
+        "jdbc" : {
+          "port" : 30015,
+          "host" : "ussltcsnl1177.solutions.glbsnet.com",
+          "driver" : "com.sap.db.jdbc.Driver",
+          "password" : "xxx",
+          "user" : "DGH_ADMIN"
+        },
+        "gen" : {
+          "mva" : 120,
+          "ofn" : "autorun_rt.pmf",
+          "mqi" : 5000,
+          "pcd" : 10000,
+          "esd" : 5000,
+          "pcp" : 9999,
+          "txv" : 7
+        }
+      }
+    }
+  }
+}

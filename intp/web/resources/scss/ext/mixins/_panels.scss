@@ -1,0 +1,26 @@
+@mixin panel-variant-ext($border, $heading-text-color, $heading-bg-color, $heading-border) {
+  border-color: $border;
+
+  & > .panel-heading {
+    color: $heading-text-color;
+    background-color: $heading-bg-color;
+    border-color: $gray-lighter;
+    border-top: 3px solid $heading-border;
+
+    h1, h2, h3, h4{
+      margin: 0;
+    }
+    + .panel-collapse > .panel-body {
+      border-top-color: $border;
+    }
+    .badge {
+      color: $heading-bg-color;
+      background-color: $heading-text-color;
+    }
+  }
+  & > .panel-footer {
+    + .panel-collapse > .panel-body {
+      border-bottom-color: $border;
+    }
+  }
+}

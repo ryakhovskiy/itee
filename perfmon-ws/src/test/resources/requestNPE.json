@@ -1,0 +1,139 @@
+{
+	"autorun": {
+		"itar": {
+			"qpa": 30000,
+			"qpl": 4,
+			"qpb": 1,
+			"upa": 100,
+			"upl": 0,
+			"upb": 0
+
+		},
+		"rtar": {
+			"qpa": 30000,
+			"qpl": 4,
+			"qpb": 1,
+			"upa": 100,
+			"upl": 0,
+			"upb": 0
+		}
+	},
+	"load": {
+		"it": {
+			"query": {
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.2",
+					"driver": "com.sap.db.jdbc.Driver",
+					"password": "xxx",
+					"user": "HC_ADMIN"
+				},
+				"gen": {
+					"rr": false,
+					"et": 0,
+					"ce": 10,
+					"fe": "UTF8",
+					"fn": "../queries/hcmon/it_query.txt",
+					"qt": "QUERY",
+					"qpi": 1,
+					"si": 100
+				}
+			},
+			"update": {
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.2",
+					"driver": "com.sap.db.jdbc.driver",
+					"password": "xxx",
+					"user": "ERP_470"
+				},
+				"gen": {
+					"rr": true,
+					"et": 0,
+					"ce": 1,
+					"fe": "UTF8",
+					"fn": "../queries/hcmon/update.txt",
+					"qt": "QUERY",
+					"qpi": 1,
+					"si": 1000
+				}
+			},
+			"mon": {
+				"gen": {
+					"mva": 120,
+					"ofn": "autorun_it.pmf",
+					"mqi": 5000,
+					"pcd": 300000,
+					"esd": 5000,
+					"pcp": 9999,
+					"txv": 3
+				},
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.2",
+					"driver": "com.sap.db.jdbc.Driver",
+					"password": "xxx",
+					"user": "DGH_ADMIN"
+				}
+			}
+		},
+		"rt": {
+			"query": {
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.3",
+					"driver": "com.sap.db.jdbc.Driver",
+					"password": "xxx",
+					"user": "HC_ADMIN"
+				},
+				"gen": {
+					"rr": true,
+					"et": 0,
+					"ce": 4,
+					"fe": "UTF8",
+					"fn": "../queries/hcmon/rt_query.txt",
+					"qt": "QUERY",
+					"qpi": 1,
+					"si": 6000
+				}
+			},
+			"update": {
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.2",
+					"driver": "com.sap.db.jdbc.Driver",
+					"password": "xxx",
+					"user": "ERP_470"
+				},
+				"gen": {
+					"rr": false,
+					"et": 0,
+					"ce": 1,
+					"fe": "UTF8",
+					"fn": "../queries/hcmon/update.txt",
+					"qt": "QUERY",
+					"qpi": 1,
+					"si": 1000
+				}
+			},
+			"mon": {
+				"gen": {
+					"mva": 120,
+					"ofn": "autorun_rt.pmf",
+					"mqi": 5000,
+					"pcd": 10000,
+					"esd": 120,
+					"pcp": 4440,
+					"txv": 10
+				},
+				"jdbc": {
+					"port": 30215,
+					"host": "10.118.38.2",
+					"driver": "com.sap.db.jdbc.Driver",
+					"password": "xxx",
+					"user": "DGH_ADMIN"
+				}
+			}
+		}
+	}
+}

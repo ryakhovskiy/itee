@@ -1,0 +1,23 @@
+.panel-green {
+  @include panel-variant-ext($panel-green-border, $panel-green-text, $panel-green-heading-bg, $c-green);
+}
+
+.panel-green6 {
+  @include panel-variant-ext($panel-green6-border, $panel-green6-text, $panel-green6-heading-bg, $c-green6);
+}
+
+.panel-blue2 {
+  @include panel-variant-ext($panel-blue2-border, $panel-blue2-text, $panel-blue2-heading-bg, $c-blue2);
+}
+
+.panel-blue6 {
+  @include panel-variant-ext($panel-blue6-border, $panel-blue6-text, $panel-blue6-heading-bg, $c-blue6);
+}
+
+.panel-teal {
+  @include panel-variant-ext($panel-teal-border, $panel-teal-text, $panel-teal-heading-bg, $c-teal);
+}
+
+.panel-black {
+  @include panel-variant-ext($panel-black-border, $panel-black-text, $panel-black-heading-bg, $black);
+}

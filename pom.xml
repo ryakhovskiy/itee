@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.kr.itee</groupId>
+    <artifactId>itee</artifactId>
+    <packaging>pom</packaging>
+    <version>2.0.3-SNAPSHOT</version>
+    <modules>
+        <module>intp</module>
+        <module>dbloader</module>
+        <module>perfmon</module>
+        <module>perfmon-ws</module>
+        <module>lgenerator</module>
+        <module>assembly-mtar</module>
+    </modules>
+
+    <scm>
+        <developerConnection>scm:git:ssh://git@10.77.158.110/usr/sap/gitroot/itee</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <properties>
+        <active.mq.version>5.13.4</active.mq.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>1.10.19</mockito.version>
+        <jackson.version>1.9.13</jackson.version>
+        <c3p0.version>0.9.5.2</c3p0.version>
+        <commons.dbcp2.version>2.1.1</commons.dbcp2.version>
+        <jersey.version>1.10</jersey.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <derby.version>10.11.1.1</derby.version>
+        <google.json.version>1.1</google.json.version>
+        <proguard.version>5.2.1</proguard.version>
+        <maven.assembly.plugin.version>2.6</maven.assembly.plugin.version>
+        <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <maven.scm.plugin.version>1.9.5</maven.scm.plugin.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <maven.scm.provider.jgit.version>1.9.5</maven.scm.provider.jgit.version>
+        <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
+        <java.source.version>1.8</java.source.version>
+        <java.target.version>1.8</java.target.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <profiles>
+        <profile>
+            <id>standalone</id>
+        </profile>
+        <profile>
+            <id>sap</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <argLine>${argLine} -Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <groupId>org.jacoco</groupId>
+                <version>0.7.7.201606060606</version>
+                <configuration>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                    <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>${maven.scm.plugin.version}</version>
+                <configuration>
+                    <connectionType>developerConnection</connectionType>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.plugin.version}</version>
+                <configuration>
+                    <arguments>-DskipTests -Dmaven.deploy.skip=true</arguments>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <resume>false</resume>
+                    <commitByProject>false</commitByProject>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.plugin.version}</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>distribution/src/assembly/assembly-descriptor.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sap.cloud.db.jdbc</groupId>
+            <artifactId>ngdbc</artifactId>
+            <version>2.13.9</version>
+        </dependency>
+    </dependencies>
+
+</project>

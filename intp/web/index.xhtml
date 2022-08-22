@@ -1,0 +1,968 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+    <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+    <h:outputStylesheet name="css/open-sans.css"/>
+    <h:outputScript library="js" name="intp_general.js"/>
+    <link rel="icon" href="resources/img/logo.gif"/>
+    <title>#{intp_messages['org.kr.intp.web.index.title']}</title>
+</h:head>
+<h:body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">In-Time Server #{intpConfigurationController.version}</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="javascript:void(0)"
+                                          onclick="openTab(this, 'configurationTab')">Server<span
+                            class="sr-only">(current)</span></a></li>
+                    <li><a href="javascript:void(0)"
+                           onclick="openTab(this, 'connectionPoolingTab')">Connection Pooling</a></li>
+                </ul>
+            </div>
+
+
+            <h:form enctype="multipart/form-data">
+                <div id="configurationTab" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <h1>In-Time Configuration</h1>
+                    <!-- JDBC Configuration -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.connectionproperties']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbHost-label" for="dbHost"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.host']}"/>
+                                    <h:inputText id="dbHost" value="#{intpConfigurationController.config.dbHost}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.db.host']}">
+                                        <f:ajax execute="dbHost"
+                                                render="loadConfigurationButtonWrapper licenseWrapper"
+                                                listener="#{intpConfigurationController.setConnectionVerified(false)}"/>
+                                    </h:inputText>
+
+                                </div>
+                                <div class="form-group col-xs-3">
+                                    <h:outputLabel id="dbPort-label" for="dbPort"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.port']}"/>
+                                    <h:inputText id="dbPort"
+                                                 value="#{intpConfigurationController.config.dbPort}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 onchange="updateInstanceNumber(this)">
+                                        <f:ajax execute="dbPort" render="loadConfigurationButtonWrapper licenseWrapper"
+                                                listener="#{intpConfigurationController.setConnectionVerified(false)}"/>
+                                    </h:inputText>
+                                </div>
+                                <div class="form-group col-xs-3">
+                                    <h:outputLabel id="dbInstance-label" for="dbInstance"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.instance']}"/>
+                                    <h:inputText id="dbInstance"
+                                                 value="#{intpConfigurationController.config.dbInstance}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 onchange="updatePort(this)">
+                                        <f:ajax execute="dbInstance" render="loadConfigurationButtonWrapper licenseWrapper"
+                                                listener="#{intpConfigurationController.setConnectionVerified(false)}"/>
+                                    </h:inputText>
+                                </div>
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbUser-label" for="dbUser"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.user']}"/>
+                                    <h:inputText id="dbUser" value="#{intpConfigurationController.config.dbUser}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.db.user']}">
+                                        <f:ajax execute="dbUser" render="loadConfigurationButtonWrapper licenseWrapper"
+                                                listener="#{intpConfigurationController.setConnectionVerified(false)}"/>
+                                    </h:inputText>
+                                </div>
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbPassword-label" for="dbPassword"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.password']}"/>
+                                    <h:inputSecret id="dbPassword" redisplay="true"
+                                                   value="#{intpConfigurationController.config.dbPassword}"
+                                                   class=" form-control input-sm"
+                                                   disabled="#{intpConfigurationController.running}"
+                                                   a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.db.password']}">
+                                        <f:ajax execute="dbPassword" render="loadConfigurationButtonWrapper licenseWrapper"
+                                                listener="#{intpConfigurationController.setConnectionVerified(false)}"/>
+                                    </h:inputSecret>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="serviceConnectionPoolSize-label" for="serviceConnectionPoolSize"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.service.connection.pool.size']}"/>
+                                    <h:inputText id="serviceConnectionPoolSize" redisplay="true"
+                                                 value="#{intpConfigurationController.config.serviceConnectionPoolSize}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="connectionPoolingEnabled-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.connectionPoolingEnabled}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.connection.pooling.enabled']}
+                                    </h:outputLabel>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbLogging-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox value="#{intpConfigurationController.config.dbLogging}"
+                                                                 disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.db.logging']}
+                                    </h:outputLabel>
+                                </div>
+                                <div class="col-xs-6">
+                                    <h:commandButton id="verifyConnectionButton"
+                                                     value="#{intp_messages['org.kr.intp.web.index.btn.verifyconnectionproperties']}"
+                                                     actionListener="#{intpConfigurationController.verifyConnectionProperties()}"
+                                                     class="btn btn-default btn-block"
+                                                     disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="col-xs-6" id="buttons">
+                                    <h:panelGroup id="startServerButtonWrapper" class="btn-block">
+                                        <h:commandButton id="startServerButton"
+                                                         value="#{intp_messages['org.kr.intp.web.index.btn.start.server']}"
+                                                         actionListener="#{intpConfigurationController.startServer()}"
+                                                         class="btn btn-primary btn-block"
+                                                         rendered="#{intpConfigurationController.running==false}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="stopServerButtonWrapper" class="btn-block">
+                                        <h:commandButton id="stopServerButton"
+                                                         value="#{intp_messages['org.kr.intp.web.index.btn.stop.server']}"
+                                                         actionListener="#{intpConfigurationController.stopServer()}"
+                                                         class="btn btn-danger btn-block"
+                                                         rendered="#{intpConfigurationController.running==true}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="workbenchButonWrapper" class="btn-block">
+                                        <h:commandButton id="workbenchButon"
+                                                         type="button"
+                                                         class="btn btn-default btn-block"
+                                                         value="#{intp_messages['org.kr.intp.web.index.btn.workbench']}"
+                                                         onclick="workbench()"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="loadConfigurationButtonWrapper" class="btn-block">
+                                        <h:commandButton id="loadConfigurationButton"
+                                                         value="#{intp_messages['org.kr.intp.web.index.btn.load.config']}"
+                                                         actionListener="#{intpConfigurationController.loadConfiguration()}"
+                                                         class="btn btn-default btn-block"
+                                                         rendered="#{intpConfigurationController.running==false and intpConfigurationController.connectionVerified==true}"/>
+                                    </h:panelGroup>
+                                </div>
+                                <!-- License Upload-->
+
+                                <h:panelGroup id="licenseWrapper">
+                                    <h:panelGroup rendered="#{intpConfigurationController.running==false}">
+                                        <h4>License</h4>
+                                    </h:panelGroup>
+                                    <h:outputText
+                                            value="Please validate the connection to install or update the license information."
+                                            rendered="#{intpConfigurationController.running==false and intpConfigurationController.connectionVerified==false}"/>
+                                    <div class="col-xs-6">
+
+                                        <h:outputLabel class="btn btn-block btn-default btn-file"
+                                                       rendered="#{intpConfigurationController.running==false and intpConfigurationController.connectionVerified==true}">
+                                            <h:inputFile id="file"
+                                                         value="#{intpConfigurationController.file}"/> Browse License File
+                                        </h:outputLabel>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h:commandButton value="Update License"
+                                                         actionListener="#{intpConfigurationController.updateLicense()}"
+                                                         class="btn btn-default btn-block"
+                                                         rendered="#{intpConfigurationController.running==false and intpConfigurationController.connectionVerified==true}"/>
+                                    </div>
+                                </h:panelGroup>
+                                <div class="col-xs-12">
+                                    <h:messages style="margin-top: 20px; margin-bottom: 0" globalOnly="true"
+                                                errorClass="alert alert-danger"
+                                                warnClass="alert alert-warning"
+                                                infoClass="alert alert-info"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- In-Time Server Instance Configuration -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-green6">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.intimeinstance']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="intpId-label" for="intpId"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.id']}"/>
+                                    <h:inputText id="intpId" value="#{intpConfigurationController.config.intpId}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.intp.id']}" />
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="intpName-label" for="intpName"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.name']}"/>
+                                    <h:inputText id="intpName" value="#{intpConfigurationController.config.intpName}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.intp.name']}" />
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="intpType-label" for="intpType"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.type']}"/>
+                                    <h:selectOneMenu id="intpType"
+                                                     value="#{intpConfigurationController.config.intpType}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItems value="#{intpConfigurationController.serverTypes}"/>
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="intpSize-label" for="intpSize"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.size']}"/>
+                                    <h:inputText id="intpSize" value="#{intpConfigurationController.config.intpSize}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"
+                                                 a:placeholder="#{intp_messages['org.kr.intp.web.index.placeholder.intp.size']}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SAP HANA Objects -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-teal">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.hanaobjects']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbSchema-label" for="dbSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.schema']}"/>
+                                    <h:inputText id="dbSchema" value="#{intpConfigurationController.config.dbSchema}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbGenObjectsSchema-label" for="dbGenObjectsSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.gen.objects.schema']}"/>
+                                    <h:inputText id="dbGenObjectsSchema"
+                                                 value="#{intpConfigurationController.config.dbGenObjectsSchema}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbFiCalendarSchema-label" for="dbFiCalendarSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.ficalendar.schema']}"/>
+                                    <h:inputText id="dbFiCalendarSchema"
+                                                 value="#{intpConfigurationController.config.dbFiCalendarSchema}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="dbFiCalendarTable-label" for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.db.ficalendar.table']}"/>
+                                    <h:inputText id="dbFiCalendarTable"
+                                                 value="#{intpConfigurationController.config.dbFiCalendarTable}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix visible-md visible-lg"></div>
+                    <!-- Timeouts -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-blue2">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.timeouts']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbHaEnabled-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.dbHaEnabled}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.runtime.db.ha.enabled']}
+                                    </h:outputLabel>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbHaPauseTimeIncreasing-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.dbHaPauseTimeIncreasing}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.runtime.db.ha.pause.time.increasing']}
+                                    </h:outputLabel>
+                                </div>
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsConnectionTimeoutMs-label" for="dbSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.connection_timeout_ms']}"/>
+                                    <h:inputText id="globalTimeoutsConnectionTimeoutMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsConnectionTimeoutMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsConnectionTotalTimeoutMs-label"
+                                                   for="dbGenObjectsSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.connection_total_timeout_ms']}"/>
+                                    <h:inputText id="globalTimeoutsConnectionTotalTimeoutMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsConnectionTotalTimeoutMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsConnectionRetryPauseMs-label"
+                                                   for="dbFiCalendarSchema"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.connection_retry_pause_ms']}"/>
+                                    <h:inputText id="globalTimeoutsConnectionRetryPauseMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsConnectionRetryPauseMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsHookExecutionMaxDurationMs-label"
+                                                   for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.hook_execution_max_duration_ms']}"/>
+                                    <h:inputText id="globalTimeoutsHookExecutionMaxDurationMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsHookExecutionMaxDurationMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsHookTotalTimeoutMs-label" for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.hook_total_timeout_ms']}"/>
+                                    <h:inputText id="globalTimeoutsHookTotalTimeoutMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsHookTotalTimeoutMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsHookRetryPauseMs-label" for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.hook_retry_pause_ms']}"/>
+                                    <h:inputText id="globalTimeoutsHookRetryPauseMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsHookRetryPauseMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsKeyProcExecutionMaxDurationMs-label"
+                                                   for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.key_proc_execution_max_duration_ms']}"/>
+                                    <h:inputText id="globalTimeoutsKeyProcExecutionMaxDurationMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsKeyProcExecutionMaxDurationMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsKeyProcTotalTimeoutMs-label"
+                                                   for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.key_proc_total_timeout_ms']}"/>
+                                    <h:inputText id="globalTimeoutsKeyProcTotalTimeoutMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsKeyProcTotalTimeoutMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="globalTimeoutsKeyProcRetryPauseMs-label" for="dbFiCalendarTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.global.timeouts.key_proc_retry_pause_ms']}"/>
+                                    <h:inputText id="globalTimeoutsKeyProcRetryPauseMs"
+                                                 value="#{intpConfigurationController.config.globalTimeoutsKeyProcRetryPauseMs}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Runtime Parameters-->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-blue6">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.runtimeparameters']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="aggregationPlaceholder-label" for="aggregationPlaceholder"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.runtime.aggr.placeholder']}"/>
+                                    <h:inputText id="aggregationPlaceholder"
+                                                 value="#{intpConfigurationController.config.aggregationPlaceholder}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="executorOptimizationStrategy-label"
+                                                   for="executorOptimizationStrategy"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.runtime.executor.optimization.strategy']}"/>
+                                    <h:selectOneMenu id="executorOptimizationStrategy"
+                                                     value="#{intpConfigurationController.config.executorOptimizationStrategy}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItems
+                                                value="#{intpConfigurationController.executorOptimizationStrategies}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-12">
+                                    <h:outputLabel id="archiveLogPeriodFactor-label" for="archiveLogPeriodFactor"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.runtime.archive.log.period.factor']}"/>
+                                    <h:inputText id="archiveLogPeriodFactor"
+                                                 value="#{intpConfigurationController.config.archiveLogPeriodFactor}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbLoadThresholdCPU-label" for="dbLoadThresholdCPU"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.runtime.db.load.threshold.cpu']}"/>
+                                    <h:inputText id="dbLoadThresholdCPU"
+                                                 value="#{intpConfigurationController.config.dbLoadThresholdCPU}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="dbLoadThresholdMem-label" for="dbLoadThresholdMem"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.runtime.db.load.threshold.mem']}"/>
+                                    <h:inputText id="dbLoadThresholdMem"
+                                                 value="#{intpConfigurationController.config.dbLoadThresholdMem}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="concurrentDelta-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.concurrentDelta}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.runtime.concurrent.delta']}
+                                    </h:outputLabel>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="clearEmptyLogActivities-label" class="checkbox col-xs-12">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.clearEmptyLogActivities}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.runtime.clear.empty.log.activities']}
+                                    </h:outputLabel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monitoring -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-black">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.monitoring']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <h:outputLabel id="dbAppMonitorFrequency-label" for="dbAppMonitorFrequency"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.monitor.db.app.monitor.frequency']}"/>
+                                    <h:inputText id="dbAppMonitorFrequency"
+                                                 value="#{intpConfigurationController.config.dbAppMonitorFrequency}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel id="hardwareMonitorFrequency-label" for="hardwareMonitorFrequency"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.monitor.hardware.monitor.frequency']}"/>
+                                    <h:inputText id="hardwareMonitorFrequency"
+                                                 value="#{intpConfigurationController.config.hardwareMonitorFrequency}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <h:outputLabel id="hardwareMonitorEnabled-label" class="checkbox">
+                                        <h:selectBooleanCheckbox
+                                                value="#{intpConfigurationController.config.hardwareMonitorEnabled}"
+                                                disabled="#{intpConfigurationController.running}"/>
+                                        #{intp_messages['org.kr.intp.web.index.label.monitor.hardware.monitor.enabled']}
+                                    </h:outputLabel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language -->
+                    <div class="col-xs-12 col-md-6">
+                        <div class="panel panel-green">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.language']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <h:outputLabel id="intpLocaleLanguage-label" for="intpLocaleLanguage"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.locale.language']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="intpLocaleLanguage"
+                                                 value="#{intpConfigurationController.config.intpLocaleLanguage}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group">
+                                    <h:outputLabel id="intpLocaleCountry-label" for="intpLocaleCountry"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.locale.country']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="intpLocaleCountry"
+                                                 value="#{intpConfigurationController.config.intpLocaleCountry}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div id="connectionPoolingTab" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                     style="display:none">
+                    <h1>In-Time Configuration</h1>
+                    <!-- Connection Pooling -->
+                    <div class="col-xs-12 col-md-12">
+                        <div class="panel panel-black">
+                            <div class="panel-heading">
+                                <h4>#{intp_messages['org.kr.intp.web.index.heading.pooling']}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="poolClass-label" for="poolClass"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.class']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="poolClass"
+                                                 value="#{intpConfigurationController.config.poolClass}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="acquireIncrement-label" for="acquireIncrement"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.acquireIncrement']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="acquireIncrement"
+                                                 value="#{intpConfigurationController.config.acquireIncrement}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="acquireRetryAttempts-label" for="acquireRetryAttempts"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.acquireRetryAttempts']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="acquireRetryAttempts"
+                                                 value="#{intpConfigurationController.config.acquireRetryAttempts}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="acquireRetryDelay-label" for="acquireRetryDelay"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.acquireRetryDelay']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="acquireRetryDelay"
+                                                 value="#{intpConfigurationController.config.acquireRetryDelay}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="autoCommitOnClose-label" for="autoCommitOnClose"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.autoCommitOnClose']}"/>
+                                    <h:selectOneMenu id="autoCommitOnClose"
+                                                     value="#{intpConfigurationController.config.autoCommitOnClose}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="automaticTestTable-label" for="automaticTestTable"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.automaticTestTable']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="automaticTestTable"
+                                                 value="#{intpConfigurationController.config.automaticTestTable}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="breakAfterAcquireFailure-label" for="breakAfterAcquireFailure"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.breakAfterAcquireFailure']}"/>
+                                    <h:selectOneMenu id="breakAfterAcquireFailure"
+                                                     value="#{intpConfigurationController.config.breakAfterAcquireFailure}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="checkoutTimeout-label" for="checkoutTimeout"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.checkoutTimeout']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="checkoutTimeout"
+                                                 value="#{intpConfigurationController.config.checkoutTimeout}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="connectionCustomizerClassName-label"
+                                                   for="connectionCustomizerClassName"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.connectionCustomizerClassName']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="connectionCustomizerClassName"
+                                                 value="#{intpConfigurationController.config.connectionCustomizerClassName}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="connectionTesterClassName-label" for="connectionTesterClassName"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.connectionTesterClassName']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="connectionTesterClassName"
+                                                 value="#{intpConfigurationController.config.connectionTesterClassName}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="contextClassLoaderSource-label" for="contextClassLoaderSource"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.contextClassLoaderSource']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="contextClassLoaderSource"
+                                                 value="#{intpConfigurationController.config.contextClassLoaderSource}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="dataSourceName-label" for="dataSourceName"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.dataSourceName']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="dataSourceName"
+                                                 value="#{intpConfigurationController.config.dataSourceName}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="debugUnreturnedConnectionStackTraces-label"
+                                                   for="debugUnreturnedConnectionStackTraces"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.debugUnreturnedConnectionStackTraces']}"/>
+                                    <h:selectOneMenu id="debugUnreturnedConnectionStackTraces"
+                                                     value="#{intpConfigurationController.config.debugUnreturnedConnectionStackTraces}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="driverClass-label" for="driverClass"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.driverClass']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="driverClass"
+                                                 value="#{intpConfigurationController.config.driverClass}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="factoryClassLocation-label" for="factoryClassLocation"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.factoryClassLocation']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="factoryClassLocation"
+                                                 value="#{intpConfigurationController.config.factoryClassLocation}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="forceIgnoreUnresolvedTransactions-label"
+                                                   for="forceIgnoreUnresolvedTransactions"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.forceIgnoreUnresolvedTransactions']}"/>
+                                    <h:selectOneMenu id="forceIgnoreUnresolvedTransactions"
+                                                     value="#{intpConfigurationController.config.forceIgnoreUnresolvedTransactions}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="forceSynchronousCheckins-label" for="forceSynchronousCheckins"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.forceSynchronousCheckins']}"/>
+                                    <h:selectOneMenu id="forceSynchronousCheckins"
+                                                     value="#{intpConfigurationController.config.forceSynchronousCheckins}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="forceUseNamedDriverClass-label" for="forceUseNamedDriverClass"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.forceUseNamedDriverClass']}"/>
+                                    <h:selectOneMenu id="forceUseNamedDriverClass"
+                                                     value="#{intpConfigurationController.config.forceUseNamedDriverClass}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="idleConnectionTestPeriod-label" for="idleConnectionTestPeriod"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.idleConnectionTestPeriod']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="idleConnectionTestPeriod"
+                                                 value="#{intpConfigurationController.config.idleConnectionTestPeriod}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="initialPoolSize-label" for="initialPoolSize"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.initialPoolSize']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="initialPoolSize"
+                                                 value="#{intpConfigurationController.config.initialPoolSize}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxAdministrativeTaskTime-label" for="maxAdministrativeTaskTime"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxAdministrativeTaskTime']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxAdministrativeTaskTime"
+                                                 value="#{intpConfigurationController.config.maxAdministrativeTaskTime}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxConnectionAge-label" for="maxConnectionAge"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxConnectionAge']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxConnectionAge"
+                                                 value="#{intpConfigurationController.config.maxConnectionAge}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxIdleTime-label" for="maxIdleTime"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxIdleTime']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxIdleTime"
+                                                 value="#{intpConfigurationController.config.maxIdleTime}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxIdleTimeExcessConnections-label"
+                                                   for="maxIdleTimeExcessConnections"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxIdleTimeExcessConnections']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxIdleTimeExcessConnections"
+                                                 value="#{intpConfigurationController.config.maxIdleTimeExcessConnections}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxPoolSize-label" for="maxPoolSize"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxPoolSize']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxPoolSize"
+                                                 value="#{intpConfigurationController.config.maxPoolSize}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxStatements-label" for="maxStatements"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxStatements']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxStatements"
+                                                 value="#{intpConfigurationController.config.maxStatements}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="maxStatementsPerConnection-label"
+                                                   for="maxStatementsPerConnection"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.maxStatementsPerConnection']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="maxStatementsPerConnection"
+                                                 value="#{intpConfigurationController.config.maxStatementsPerConnection}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="minPoolSize-label" for="minPoolSize"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.minPoolSize']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="minPoolSize"
+                                                 value="#{intpConfigurationController.config.minPoolSize}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="numHelperThreads-label" for="numHelperThreads"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.numHelperThreads']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="numHelperThreads"
+                                                 value="#{intpConfigurationController.config.numHelperThreads}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="overrideDefaultUser-label" for="overrideDefaultUser"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.overrideDefaultUser']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="overrideDefaultUser"
+                                                 value="#{intpConfigurationController.config.overrideDefaultUser}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="overrideDefaultPassword-label" for="overrideDefaultPassword"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.overrideDefaultPassword']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="overrideDefaultPassword"
+                                                 value="#{intpConfigurationController.config.overrideDefaultPassword}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="password-label" for="password"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.password']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="password"
+                                                 value="#{intpConfigurationController.config.password}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="preferredTestQuery-label" for="preferredTestQuery"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.preferredTestQuery']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="preferredTestQuery"
+                                                 value="#{intpConfigurationController.config.preferredTestQuery}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="privilegeSpawnedThreads-label" for="privilegeSpawnedThreads"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.privilegeSpawnedThreads']}"/>
+                                    <h:selectOneMenu id="privilegeSpawnedThreads"
+                                                     value="#{intpConfigurationController.config.privilegeSpawnedThreads}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="propertyCycle-label" for="propertyCycle"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.propertyCycle']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="propertyCycle"
+                                                 value="#{intpConfigurationController.config.propertyCycle}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="statementCacheNumDeferredCloseThreads-label"
+                                                   for="statementCacheNumDeferredCloseThreads"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.statementCacheNumDeferredCloseThreads']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="statementCacheNumDeferredCloseThreads"
+                                                 value="#{intpConfigurationController.config.statementCacheNumDeferredCloseThreads}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="testConnectionOnCheckin-label" for="testConnectionOnCheckin"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.testConnectionOnCheckin']}"/>
+                                    <h:selectOneMenu id="testConnectionOnCheckin"
+                                                     value="#{intpConfigurationController.config.testConnectionOnCheckin}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="testConnectionOnCheckout-label" for="testConnectionOnCheckout"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.testConnectionOnCheckout']}"/>
+                                    <h:selectOneMenu id="testConnectionOnCheckout"
+                                                     value="#{intpConfigurationController.config.testConnectionOnCheckout}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="unreturnedConnectionTimeout-label"
+                                                   for="unreturnedConnectionTimeout"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.unreturnedConnectionTimeout']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="unreturnedConnectionTimeout"
+                                                 value="#{intpConfigurationController.config.unreturnedConnectionTimeout}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="user-label" for="user"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.user']}"
+                                                   disabled="#{intpConfigurationController.running}"/>
+                                    <h:inputText id="user"
+                                                 value="#{intpConfigurationController.config.user}"
+                                                 class=" form-control input-sm"
+                                                 disabled="#{intpConfigurationController.running}"/>
+                                </div>
+                                <div class="form-group col-xs-6 col-md-6">
+                                    <h:outputLabel id="usesTraditionalReflectiveProxies-label"
+                                                   for="usesTraditionalReflectiveProxies"
+                                                   value="#{intp_messages['org.kr.intp.web.index.label.intp.pool.usesTraditionalReflectiveProxies']}"/>
+                                    <h:selectOneMenu id="usesTraditionalReflectiveProxies"
+                                                     value="#{intpConfigurationController.config.usesTraditionalReflectiveProxies}"
+                                                     class=" form-control input-sm"
+                                                     disabled="#{intpConfigurationController.running}">
+                                        <f:selectItem itemLabel="true" itemValue="#{true}"/>
+                                        <f:selectItem itemLabel="false" itemValue="#{false}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+    </div>
+</h:body>
+</html>

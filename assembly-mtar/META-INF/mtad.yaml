@@ -1,0 +1,10 @@
+ID: org.kr.itee
+version: ${project.version}
+
+modules:
+- name: itee
+  type: java.tomee
+
+resources:
+- name: java-hdi-container
+  type: com.sap.xs.hdi-container

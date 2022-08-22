@@ -1,0 +1,38 @@
+#all jar/war/tar/rar/etc files
+*.*ar
+
+#all idea project files
+*.iml
+
+#all idea files
+.idea/
+
+
+#all java class files (byte code)
+target/
+out/
+*.class
+
+#log files
+*.log
+
+#derby db
+**/derbydb/
+
+#conf/log4j.properties
+#conf/intp.properties
+
+#active-mq data
+activemq-data/
+
+#maven release plugin
+**/pom.xml.releaseBackup
+**/pom.xml.next
+**/pom.xml.tag
+**/pom.xml.backup
+release.properties
+
+#db-loader files
+adbl*
+
+classes/

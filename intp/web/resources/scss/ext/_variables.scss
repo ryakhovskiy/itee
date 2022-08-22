@@ -1,0 +1,46 @@
+// Colors
+$black:                   #000;
+$white:                   #FFF;
+$c-green:          #86BC25;
+$c-green6:         #046A38;
+$c-blue2:          #62B5E5;
+$c-blue6:          #012169;
+$c-teal:           #0097A9;
+$c-gray9:          #75787B;
+$c-red:            #DA291C;
+$c-orange:         #ED8B00;
+$c-yellow:         #FFCD00;
+
+// Fonts
+$font-family-sans-serif:  "Open Sans", Helvetica, Arial, sans-serif !default;
+
+// Panels
+$panel-green-text:          #000 !default;
+$panel-green-border:        #DDD !default;
+$panel-green-heading-bg:    $white !default;
+
+$panel-green6-text:          #000 !default;
+$panel-green6-border:        #DDD !default;
+$panel-green6-heading-bg:    $white !default;
+
+$panel-blue2-text:          #000 !default;
+$panel-blue2-border:        #DDD !default;
+$panel-blue2-heading-bg:    $white !default;
+
+$panel-blue6-text:          #000 !default;
+$panel-blue6-border:        #DDD !default;
+$panel-blue6-heading-bg:    $white !default;
+
+$panel-teal-text:          #000 !default;
+$panel-teal-border:        #DDD !default;
+$panel-teal-heading-bg:    $white !default;
+
+$panel-black-text:          #000 !default;
+$panel-black-border:        #DDD !default;
+$panel-black-heading-bg:    $white !default;
+
+// Customized variables
+$input-border-focus:        $c-blue2 !default;
+$border-radius-base:        0px !default;
+$border-radius-large:       0px !default;
+$border-radius-small:       0px !default;

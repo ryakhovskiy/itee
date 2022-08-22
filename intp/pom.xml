@@ -1,0 +1,178 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.kr.itee</groupId>
+        <artifactId>itee</artifactId>
+		<version>2.0.3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>intp</artifactId>
+    <packaging>war</packaging>
+
+    <name>intp</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-invoker-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <debug>true</debug>
+                    <projectsDirectory>itee/intp</projectsDirectory>
+                    <preBuildHookScript>setup.bsh</preBuildHookScript>
+                    <postBuildHookScript>verify.bsh</postBuildHookScript>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>web</directory>
+                        </resource>
+                    </webResources>
+                    <webappDirectory>${project.build.directory}/web</webappDirectory>
+                </configuration>
+            </plugin>
+            <!--<plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.13</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>proguard</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>${proguard.version}</proguardVersion>
+                    <obfuscate>true</obfuscate>
+                    <injar>classes</injar>
+                    <outjar>intp-${project.version}.jar</outjar>
+                    <options>
+                        <option>-overloadaggressively</option>
+                        <option>-keepclasseswithmembers public class * { public static void main(java.lang.String[]); }</option>
+                        <option>-keepclassmembers enum  * { public static **[] values(); public static ** valueOf(java.lang.String); }</option>
+                        <option>-keep class * implements javax.sql.DataSource</option>
+                        <option>-keep class * implements IDataSource</option>
+                        <option>-keep class DataSourceFactory</option>
+                        <option>-keep class * implements java.io.Serializable</option>
+                        <option>-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod</option>
+                        <option>-keep public class com.myapp.**.model.** { *; }</option>
+                        <option>
+                            -keep class com.myapp.**.model.** {
+                            void set*(***);
+                            boolean is*();
+                            *** get*();
+                            }
+                        </option>
+                        <option>-keepclassmembers class * {
+                            @javax.xjb.Stateless *;
+                            }
+                        </option>
+                        <option>-keep public class * implements javax.sql.DataSource {
+                                &lt;init&gt;(...);
+                            }</option>
+                    </options>
+                    <addMavenDescriptor>true</addMavenDescriptor>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <proguardInclude>${basedir}/proguard.conf</proguardInclude>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jsse.jar</lib>
+                        <lib>${java.home}/lib/jce.jar</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>${proguard.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>-->
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>${c3p0.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <!-- JSF -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,31 @@
+# all jar files
+*.jar
+
+# all idea project files
+*.iml
+
+# all idea files
+.idea/*
+
+# all java class files (byte code)
+target/*
+out/*
+*.class
+
+# all files from bin/work directory
+bin/*
+lib/*
+activemq-data/*
+adbl*/*
+spec.data
+*.pmf
+
+# all properties files
+*.properties
+
+# log files
+*.log
+
+# manifest file
+MANIFEST.MF
+

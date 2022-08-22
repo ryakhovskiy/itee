@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>InTime</title>
+    <outputStylesheet library="css" name="bootstrap.min.css"/>
+    <outputStylesheet name="css/open-sans.css"/>
+</head>
+<body>
+<div class="container">
+    <form>
+        <h2>The requested URL was not found:</h2>
+        <p><script type="text/javascript">document.write(window.location)</script></p>
+        <script type="text/javascript">
+            function Redirect() {
+                window.location="index.xhtml";
+            }
+            document.write("You will be redirected to a default page soon...");
+            setTimeout('Redirect()', 5000);
+        </script>
+        <p>Please, <a href="index.xhtml">click here</a> if it you are not being redirected</p>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Trusted-Library: true
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_11
+
+Name: META-INF/mtad.yaml
+Content-Type: text/plain
+
+Name: java/intp-${project.version}.war
+MTA-module: itee
+Content-Type: application/war
